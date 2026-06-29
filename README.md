@@ -2,32 +2,46 @@
 
 *A minimal, distraction-free text editor built with Python.*
 
-Void is a lightweight text editor focused on one thing: writing. No tabs, no sidebars, no unnecessary buttons—just a blank canvas for your thoughts.
+Void is a lightweight text editor designed with a single purpose: writing without distractions. It removes the clutter found in modern editors and provides a clean, dark workspace where your words take center stage.
 
-Designed with a dark, minimal interface, Void lets you write code, notes, Markdown, or plain text without getting in your way.
+Whether you're taking notes, writing Markdown, editing Python scripts, or drafting documentation, Void stays out of your way.
 
 ---
 
 ## Features
 
-* Minimal, distraction-free interface
+* Clean, distraction-free interface
 * Dark theme
-* Undo support
-* Open existing files
-* Create new files
-* Save and Save As
-* Supports:
-
-  * `.txt`
-  * `.md`
-  * `.py`
-  * Any other file type
+* Fast startup
+* Undo & Redo support
+* Open, create, save, and save files as
+* Find text (`Ctrl + F`)
+* Word and character count
+* Line and column indicator
+* Automatic UTF-8 file handling
+* Unsaved changes detection
+* Save confirmation before closing, opening, or creating a new file
+* Remembers the last opened directory
+* Keyboard-first workflow
+* Built entirely with Python's standard library
 
 ---
 
-## Screenshot
+## Keyboard Shortcuts
 
-*(Add a screenshot here once the project has one.)*
+| Shortcut           | Action     |
+| ------------------ | ---------- |
+| `Ctrl + N`         | New File   |
+| `Ctrl + O`         | Open File  |
+| `Ctrl + S`         | Save       |
+| `Ctrl + Shift + S` | Save As    |
+| `Ctrl + F`         | Find       |
+| `Ctrl + A`         | Select All |
+| `Ctrl + Z`         | Undo       |
+| `Ctrl + Y`         | Redo       |
+| `Ctrl + X`         | Cut        |
+| `Ctrl + C`         | Copy       |
+| `Ctrl + V`         | Paste      |
 
 ---
 
@@ -46,57 +60,85 @@ Run the editor:
 python void.py
 ```
 
-or
+or, depending on your system:
 
 ```bash
 python3 void.py
 ```
 
-No external dependencies are required. Void uses Python's built-in `tkinter` library.
+No external packages are required.
 
----
-
-## Keyboard Shortcuts
-
-| Shortcut   | Action    |
-| ---------- | --------- |
-| `Ctrl + N` | New file  |
-| `Ctrl + O` | Open file |
-| `Ctrl + S` | Save      |
+Void is built entirely with Python's standard `tkinter` library.
 
 ---
 
 ## Philosophy
 
-Most modern text editors try to do everything.
+Void isn't trying to replace a full-featured IDE.
 
-Void does almost nothing—and that's the point.
+It isn't meant to compete with editors packed with extensions, sidebars, AI assistants, terminals, or dozens of settings.
 
-It's meant to disappear while you write, giving you a clean workspace without notifications, extensions, or clutter. Whether you're drafting notes, writing Markdown, or editing a quick script, Void stays out of your way.
+Instead, Void embraces simplicity.
 
----
+Open the application, write what you need to write, save your work, and close it. Every feature exists to support writing—not to distract from it.
 
-## Built With
-
-* Python 3
-* Tkinter
+The best software often disappears while you use it. That's the goal of Void.
 
 ---
 
-## Future Ideas
+## Project Structure
 
-* Auto-save
-* Line numbers
-* Syntax highlighting
-* Themes
-* Find & Replace
-* Word count
+```text
+Void/
+├── void.py
+├── README.md
+├── LICENSE
+├── .gitignore
+├── screenshots/
+│   └── editor.png
+└── assets/
+    └── icon.ico
+```
+
+---
+
+## Screenshots
+
+A screenshot of the editor will be added as the project evolves.
+
+<img width="1130" height="892" alt="Screenshot_20260629_153051" src="https://github.com/user-attachments/assets/c9f62854-285e-48fc-84f9-39adea6e80f8" />
+
+---
+
+## Future Plans
+
+Void will continue to stay minimal, but future improvements may include:
+
 * Fullscreen mode
-* Custom fonts
-* Recent files
+* Adjustable font size
+* Auto-save recovery
+* Typewriter scrolling
+* Better search experience
+* Optional themes
+* Cross-platform application icon
+
+The goal is to improve the writing experience without sacrificing simplicity.
+
+---
+
+## Contributing
+
+Contributions are welcome.
+
+If you'd like to improve Void, feel free to fork the repository, create a new branch, and submit a pull request.
+
+Suggestions, bug reports, and feature requests are always appreciated.
 
 ---
 
 ## License
 
-This project is open source and available under the MIT License.
+This project is licensed under the MIT License.
+
+See the `LICENSE` file for more information.
+<img width="1130" height="892" alt="Screenshot_20260629_153051" src="https://github.com/user-attachments/assets/35733fc0-41af-4c4d-a25b-26739c71bfb7" />
