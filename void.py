@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import json
-import os
 import tkinter as tk
 from pathlib import Path
 from tkinter import (
@@ -18,7 +17,16 @@ class VoidEditor:
     def __init__(self):
         self.root = tk.Tk()
         self.root.geometry("1000x700")
-        self.root.configure(bg="#1a1a1a")
+        self.root.configure(bg="#000000")
+        self.root.title(APP_NAME)
+        self.root.option_add("*background", "#000000")
+        self.root.option_add("*foreground", "#ffffff")
+        self.root.option_add("*activeBackground", "#202020")
+        self.root.option_add("*activeForeground", "#ffffff")
+        self.root.option_add("*insertBackground", "#ffffff")
+        self.root.option_add("*selectBackground", "#404040")
+
+        self.create_app_icon()
 
         # Editor state
         self.current_file = None
@@ -29,7 +37,6 @@ class VoidEditor:
 
         self.create_editor()
         self.create_status_bar()
-        self.create_menu()
         self.bind_shortcuts()
 
         self.text.edit_modified(False)
@@ -37,6 +44,7 @@ class VoidEditor:
         self.text.bind("<<Modified>>", self.on_modified)
         self.text.bind("<KeyRelease>", self.update_status)
         self.text.bind("<ButtonRelease>", self.update_status)
+        self.text.bind("<Button-1>", lambda event: self.text.focus_set())
 
         self.root.protocol(
             "WM_DELETE_WINDOW",
@@ -50,10 +58,32 @@ class VoidEditor:
     # UI
     # --------------------------------------------------
 
+    def create_app_icon(self):
+        icon = tk.PhotoImage(width=32, height=32)
+        icon.put("#000000", to=(0, 0, 32, 32))
+
+        cx, cy = 15, 15
+        for step in range(30):
+            angle = step * 0.4
+            radius = 1 + step * 0.35
+            x = int(cx + radius * __import__("math").cos(angle))
+            y = int(cy + radius * __import__("math").sin(angle))
+            if 0 <= x < 32 and 0 <= y < 32:
+                icon.put("#ffffff", (x, y))
+
+        for offset in range(-12, 13):
+            x = cx + offset
+            y = cy + offset
+            if 0 <= x < 32 and 0 <= y < 32:
+                icon.put("#ffffff", (x, y))
+
+        self.root.iconphoto(False, icon)
+        self.app_icon = icon
+
     def create_editor(self):
         self.text = tk.Text(
             self.root,
-            bg="#1a1a1a",
+            bg="#000000",
             fg="#e0e0e0",
             insertbackground="#ffffff",
             relief="flat",
@@ -62,7 +92,7 @@ class VoidEditor:
             undo=True,
             padx=60,
             pady=40,
-            font=("JetBrains Mono", 13),
+            font=("JetBrains Mono", 11),
             highlightthickness=0,
             selectbackground="#404040",
             spacing3=4,
@@ -71,6 +101,8 @@ class VoidEditor:
         scrollbar = tk.Scrollbar(
             self.root,
             command=self.text.yview,
+            bg="#000000",
+            troughcolor="#000000",
         )
 
         self.text.configure(
@@ -87,6 +119,7 @@ class VoidEditor:
             expand=True,
         )
 
+        self.root.update_idletasks()
         self.text.focus_set()
 
     def create_status_bar(self):
@@ -94,121 +127,17 @@ class VoidEditor:
             self.root,
             text="",
             anchor="w",
-            bg="#202020",
+            bg="#000000",
             fg="#bdbdbd",
             padx=10,
             pady=4,
-            font=("Segoe UI", 9),
+            font=("Segoe UI", 8),
         )
 
         self.status.pack(
             side="bottom",
             fill="x",
         )
-
-    def create_menu(self):
-        menu = tk.Menu(self.root)
-
-        file_menu = tk.Menu(
-            menu,
-            tearoff=False,
-        )
-
-        file_menu.add_command(
-            label="New",
-            accelerator="Ctrl+N",
-            command=self.new_file,
-        )
-
-        file_menu.add_command(
-            label="Open...",
-            accelerator="Ctrl+O",
-            command=self.open_file,
-        )
-
-        file_menu.add_separator()
-
-        file_menu.add_command(
-            label="Save",
-            accelerator="Ctrl+S",
-            command=self.save_file,
-        )
-
-        file_menu.add_command(
-            label="Save As...",
-            accelerator="Ctrl+Shift+S",
-            command=self.save_as,
-        )
-
-        file_menu.add_separator()
-
-        file_menu.add_command(
-            label="Exit",
-            command=self.exit_editor,
-        )
-
-        menu.add_cascade(
-            label="File",
-            menu=file_menu,
-        )
-
-        edit_menu = tk.Menu(
-            menu,
-            tearoff=False,
-        )
-
-        edit_menu.add_command(
-            label="Undo",
-            accelerator="Ctrl+Z",
-            command=lambda: self.text.event_generate("<<Undo>>"),
-        )
-
-        edit_menu.add_command(
-            label="Redo",
-            accelerator="Ctrl+Y",
-            command=lambda: self.text.event_generate("<<Redo>>"),
-        )
-
-        edit_menu.add_separator()
-
-        edit_menu.add_command(
-            label="Cut",
-            accelerator="Ctrl+X",
-            command=lambda: self.text.event_generate("<<Cut>>"),
-        )
-
-        edit_menu.add_command(
-            label="Copy",
-            accelerator="Ctrl+C",
-            command=lambda: self.text.event_generate("<<Copy>>"),
-        )
-
-        edit_menu.add_command(
-            label="Paste",
-            accelerator="Ctrl+V",
-            command=lambda: self.text.event_generate("<<Paste>>"),
-        )
-
-        edit_menu.add_separator()
-
-        edit_menu.add_command(
-            label="Select All",
-            accelerator="Ctrl+A",
-            command=self.select_all,
-        )
-
-        edit_menu.add_command(
-            label="Find",
-            accelerator="Ctrl+F",
-            command=self.find_text,
-        )
-
-        menu.add_cascade(
-            label="Edit",
-            menu=edit_menu,
-        )
-
-        self.root.config(menu=menu)
 
     # --------------------------------------------------
     # Helpers
@@ -221,9 +150,9 @@ class VoidEditor:
             name = "Untitled"
 
         if self.modified:
-            self.root.title(f"{APP_NAME} - {name} *")
+            self.root.title(f"{APP_NAME} — {name} *")
         else:
-            self.root.title(f"{APP_NAME} - {name}")
+            self.root.title(f"{APP_NAME} — {name}")
 
     def update_status(self, event=None):
         cursor = self.text.index("insert")
@@ -308,27 +237,27 @@ class VoidEditor:
     # --------------------------------------------------
 
     def bind_shortcuts(self):
-        self.root.bind(
+        self.root.bind_all(
             "<Control-n>",
             self.new_file,
         )
 
-        self.root.bind(
+        self.root.bind_all(
             "<Control-o>",
             self.open_file,
         )
 
-        self.root.bind(
+        self.root.bind_all(
             "<Control-s>",
             self.save_file,
         )
 
-        self.root.bind(
+        self.root.bind_all(
             "<Control-S>",
             self.save_as,
         )
 
-        self.root.bind(
+        self.root.bind_all(
             "<Control-f>",
             self.find_text,
         )
@@ -351,33 +280,6 @@ class VoidEditor:
         )
 
     # --------------------------------------------------
-    # Remaining methods
-    # (Implemented in Part 2)
-    # --------------------------------------------------
-
-    def new_file(self, event=None):
-        pass
-
-    def open_file(self, event=None):
-        pass
-
-    def save_file(self, event=None):
-        pass
-
-    def save_as(self, event=None):
-        pass
-
-    def find_text(self, event=None):
-        pass
-
-    def confirm_unsaved(self):
-        pass
-
-    def exit_editor(self):
-        pass
-
-
-        # --------------------------------------------------
     # File Operations
     # --------------------------------------------------
 
@@ -588,7 +490,7 @@ class VoidEditor:
 
         answer = messagebox.askyesnocancel(
             "Unsaved Changes",
-            "Save changes before continuing?",
+            "Save changes before proceeding?",
         )
 
         if answer is None:
